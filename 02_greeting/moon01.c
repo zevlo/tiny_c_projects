@@ -4,12 +4,14 @@
 int moon_phase(int year,int month,int day)
 {
     int d,g,e;
+    int is_leap = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+    int base = is_leap ? 60 : 59;
 
 	d = day;
     if(month == 2)
 		d += 31;
     else if(month > 2)
-		d += 59+(month-3)*30.6+0.5;
+		d += base + (int)((month-3)*30.6 + 0.5);
     g = (year-1900)%19;
     e = (11*g + 29) % 30;
     if(e == 25 || e == 24)
@@ -31,7 +33,7 @@ int main(void)
 	time(&now);	
 	t = localtime(&now);
 
-	mp = moon_phase(t->tm_year+1900,t->tm_mon,t->tm_mday);
+	mp = moon_phase(t->tm_year+1900,t->tm_mon+1,t->tm_mday);
 	printf("The moon is %s\n",phase[mp]);
 
 	return(0);
